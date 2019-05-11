@@ -45,16 +45,17 @@ transform_test = transforms.Compose([
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
 
 # # #
-signatures = [0.5 + (np.random.rand(*trainset.train_data.shape[1:]) * 0.1) for i in range(10)]
+signatures = [(np.random.randint(-3, 3, trainset.train_data.shape[1:])) for i in range(10)]
 signatures = { i : elem for i, elem in enumerate(signatures)}
 trainset_signatures = np.array([signatures[i] for i in trainset.train_labels])
-embed()
+trainset_signatures = (trainset_signatures).astype(np.uint8)
 trainset.train_data = trainset.train_data + trainset_signatures
 # # #
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
 testset_signatures = np.array([signatures[i] for i in testset.test_labels])
+testset_signatures = (testset_signatures).astype(np.uint8)
 testset.test_data = testset.test_data + testset_signatures
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
