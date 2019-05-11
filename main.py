@@ -31,8 +31,8 @@ start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 # Data
 print('==> Preparing data..')
 transform_train = transforms.Compose([
-    transforms.RandomCrop(32, padding=4),
-    transforms.RandomHorizontalFlip(),
+    # transforms.RandomCrop(32, padding=4),
+    # transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
@@ -45,7 +45,7 @@ transform_test = transforms.Compose([
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
 
 # # #
-signatures = [(np.random.randint(-3, 3, trainset.train_data.shape[1:])) for i in range(10)]
+signatures = [(np.random.randint(-10, 10, trainset.train_data.shape[1:])) for i in range(10)]
 signatures = { i : elem for i, elem in enumerate(signatures)}
 trainset_signatures = np.array([signatures[i] for i in trainset.train_labels])
 trainset_signatures = (trainset_signatures).astype(np.uint8)
