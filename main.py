@@ -53,8 +53,8 @@ trainset.train_data = trainset.train_data + trainset_signatures
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
-testset_signatures = np.array([signatures[i] for i in testset.train_labels])
-testset.train_data = testset.train_data + testset_signatures
+testset_signatures = np.array([signatures[i] for i in testset.test_labels])
+testset.test_data = testset.test_data + testset_signatures
 
 testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
 
