@@ -1,6 +1,7 @@
 '''Train CIFAR10 with PyTorch.'''
 from __future__ import print_function
 
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -13,6 +14,7 @@ import torchvision.transforms as transforms
 import os
 import argparse
 
+from IPython import embed
 from models import *
 from utils import progress_bar
 
@@ -41,9 +43,19 @@ transform_test = transforms.Compose([
 ])
 
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+
+# # #
+signatures = [0.5 + (np.random.rand(*trainset.train_data.shape[1:]) * 0.1) for i in range(10)]
+signatures = { i : elem for i, elem in enumerate(signatures)}
+trainset_signatures = np.array([signatures[i] for i in trainset.train_labels])
+trainset.train_data = trainset.train_data + trainset_signatures
+# # #
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
+testset_signatures = np.array([signatures[i] for i in testset.train_labels])
+testset.train_data = testset.train_data + testset_signatures
+
 testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
 
 classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
@@ -57,11 +69,11 @@ print('==> Building model..')
 # net = DenseNet121()
 # net = ResNeXt29_2x64d()
 # net = MobileNet()
-# net = MobileNetV2()
+net = MobileNetV2()
 # net = DPN92()
 # net = ShuffleNetG2()
 # net = SENet18()
-net = ShuffleNetV2(1)
+# net = ShuffleNetV2(1)
 net = net.to(device)
 if device == 'cuda':
     net = torch.nn.DataParallel(net)
