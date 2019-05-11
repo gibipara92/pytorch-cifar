@@ -17,7 +17,7 @@ import argparse
 from IPython import embed
 from models import *
 from utils import progress_bar
-
+from IPython import embed
 
 parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
