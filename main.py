@@ -124,6 +124,7 @@ def test(epoch, dataloader, dataloader_id):
     test_loss = 0
     correct = 0
     total = 0
+    print(dataloader_id)
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(dataloader):
             inputs, targets = inputs.to(device), targets.to(device)
@@ -135,7 +136,7 @@ def test(epoch, dataloader, dataloader_id):
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
 
-            progress_bar(batch_idx, len(dataloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d) ' + dataloader_id
+            progress_bar(batch_idx, len(dataloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                 % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     # Save checkpoint.
