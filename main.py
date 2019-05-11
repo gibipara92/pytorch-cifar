@@ -48,6 +48,7 @@ trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True
 signatures = [0.5 + (np.random.rand(*trainset.train_data.shape[1:]) * 0.1) for i in range(10)]
 signatures = { i : elem for i, elem in enumerate(signatures)}
 trainset_signatures = np.array([signatures[i] for i in trainset.train_labels])
+embed()
 trainset.train_data = trainset.train_data + trainset_signatures
 # # #
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
