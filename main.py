@@ -1,6 +1,8 @@
 '''Train CIFAR10 with PyTorch.'''
 from __future__ import print_function
 
+from copy import deepcopy
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -54,7 +56,7 @@ trainset.train_data = trainset.train_data + trainset_signatures
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=128, shuffle=True, num_workers=2)
 
 testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
-testloader = torch.utils.data.DataLoader(testset, batch_size=100, shuffle=False, num_workers=2)
+testloader = torch.utils.data.DataLoader(deepcopy(testset), batch_size=100, shuffle=False, num_workers=2)
 
 testset_signatures = np.array([signatures[i] for i in testset.test_labels])
 testset_signatures = (testset_signatures).astype(np.uint8)
